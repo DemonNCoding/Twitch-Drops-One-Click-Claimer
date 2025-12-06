@@ -17,7 +17,7 @@ Available here:
 ### **Chrome and Brave (Load Unpacked Installation)**
 
 **Download the extension folder as a ZIP:**
-[Download ZIP](https://github.com/demon4932/Twitch-Drops-One-Click-Claimer/raw/refs/heads/main/TwitchAutoClaim.zip)
+[Download ZIP](https://github.com/DemonNCoding/Twitch-Drops-One-Click-Claimer/raw/refs/heads/main/TwitchAutoClaim.zip)
 
 **Installation steps:**
 
