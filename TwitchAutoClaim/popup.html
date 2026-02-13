@@ -5,6 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Twitch Drops Claimer</title>
   <style>
+    /* Material 3 Design Tokens - Light Mode (Default) */
+    :root {
+      /* Primary Colors */
+      --md-sys-color-primary: #9147ff;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #eaddff;
+      --md-sys-color-on-primary-container: #21005d;
+      
+      /* Secondary Colors */
+      --md-sys-color-secondary: #625b71;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #e8def8;
+      --md-sys-color-on-secondary-container: #1d192b;
+      
+      /* Tertiary Colors */
+      --md-sys-color-tertiary: #7d5260;
+      --md-sys-color-on-tertiary: #ffffff;
+      
+      /* Surface Colors */
+      --md-sys-color-surface: #fffbfe;
+      --md-sys-color-surface-variant: #e7e0ec;
+      --md-sys-color-surface-container: #f3edf7;
+      --md-sys-color-surface-container-high: #ece6f0;
+      --md-sys-color-surface-container-highest: #e6e0e9;
+      --md-sys-color-on-surface: #1c1b1f;
+      --md-sys-color-on-surface-variant: #49454f;
+      
+      /* Outline */
+      --md-sys-color-outline: #79747e;
+      --md-sys-color-outline-variant: #cac4d0;
+      
+      /* Status Colors */
+      --md-sys-color-success: #2e7d32;
+      --md-sys-color-success-container: #c8e6c9;
+      --md-sys-color-error: #b3261e;
+      --md-sys-color-error-container: #f9dedc;
+      
+      /* Warning Color */
+      --md-sys-color-warning: #b25e00;
+      
+      /* Elevation */
+      --md-sys-elevation-1: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-elevation-3: 0px 1px 3px 0px rgba(0,0,0,0.3), 0px 4px 8px 3px rgba(0,0,0,0.15);
+      
+      /* Shape */
+      --md-sys-shape-small: 4px;
+      --md-sys-shape-medium: 8px;
+      --md-sys-shape-large: 12px;
+      --md-sys-shape-extra-large: 16px;
+      --md-sys-shape-full: 50%;
+      
+      /* Typography */
+      --md-sys-font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      
+      /* Animation */
+      --md-sys-motion-duration-short: 150ms;
+      --md-sys-motion-duration-medium: 250ms;
+      --md-sys-motion-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
+      
+      /* Disabled state overlay opacity */
+      --md-sys-disabled-container: rgba(28, 27, 31, 0.12);
+      --md-sys-disabled-content: rgba(28, 27, 31, 0.38);
+    }
+
+    /* Material 3 Design Tokens - Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Primary Colors */
+        --md-sys-color-primary: #d0bcff;
+        --md-sys-color-on-primary: #381e72;
+        --md-sys-color-primary-container: #4f378b;
+        --md-sys-color-on-primary-container: #eaddff;
+        
+        /* Secondary Colors */
+        --md-sys-color-secondary: #ccc2dc;
+        --md-sys-color-on-secondary: #332d41;
+        --md-sys-color-secondary-container: #4a4458;
+        --md-sys-color-on-secondary-container: #e8def8;
+        
+        /* Tertiary Colors */
+        --md-sys-color-tertiary: #efb8c8;
+        --md-sys-color-on-tertiary: #492532;
+        
+        /* Surface Colors */
+        --md-sys-color-surface: #1c1b1f;
+        --md-sys-color-surface-variant: #49454f;
+        --md-sys-color-surface-container: #211f26;
+        --md-sys-color-surface-container-high: #2b2930;
+        --md-sys-color-surface-container-highest: #36343b;
+        --md-sys-color-on-surface: #e6e1e5;
+        --md-sys-color-on-surface-variant: #cac4d0;
+        
+        /* Outline */
+        --md-sys-color-outline: #938f99;
+        --md-sys-color-outline-variant: #49454f;
+        
+        /* Status Colors */
+        --md-sys-color-success: #81c784;
+        --md-sys-color-success-container: #1b5e20;
+        --md-sys-color-error: #f2b8b5;
+        --md-sys-color-error-container: #8c1d18;
+        
+        /* Warning Color */
+        --md-sys-color-warning: #ffb74d;
+        
+        /* Elevation - Dark mode uses different shadow approach */
+        --md-sys-elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.5), 0px 1px 2px 0px rgba(0,0,0,0.3);
+        --md-sys-elevation-2: 0px 2px 6px 2px rgba(0,0,0,0.5), 0px 1px 2px 0px rgba(0,0,0,0.3);
+        --md-sys-elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.5), 0px 1px 3px 0px rgba(0,0,0,0.3);
+        
+        /* Disabled state overlay opacity - inverted for dark */
+        --md-sys-disabled-container: rgba(230, 225, 229, 0.12);
+        --md-sys-disabled-content: rgba(230, 225, 229, 0.38);
+      }
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,166 +129,305 @@
     }
 
     body {
-      width: 320px;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #6441a5 0%, #2a0845 100%);
-      color: white;
-      padding: 0;
+      width: 340px;
+      font-family: var(--md-sys-font-family);
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
     }
 
-    .container {
-      padding: 24px;
-    }
-
+    /* Header Section */
     .header {
-      text-align: center;
-      margin-bottom: 24px;
+      padding: 24px 20px 16px;
+      background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, #772ce8 100%);
+      color: var(--md-sys-color-on-primary);
+      border-radius: 0 0 var(--md-sys-shape-extra-large) var(--md-sys-shape-extra-large);
+      margin-bottom: 16px;
     }
 
-    .icon {
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    .icon-container {
       width: 48px;
       height: 48px;
-      margin: 0 auto 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: var(--md-sys-shape-large);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
+      backdrop-filter: blur(8px);
     }
 
-    h1 {
+    .header-text h1 {
       font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      letter-spacing: -0.5px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 0.1px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
-    .subtitle {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 400;
-    }
-
-    .status {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 20px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .status-text {
+    .header-text p {
       font-size: 14px;
-      line-height: 1.6;
+      opacity: 0.95;
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: 0.25px;
+    }
+
+    /* Content Section */
+    .content {
+      padding: 0 16px 16px;
+    }
+
+    /* Status Card - Material 3 Elevated Card */
+    .status-card {
+      background: var(--md-sys-color-surface-container);
+      border-radius: var(--md-sys-shape-large);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--md-sys-elevation-1);
+      text-align: center;
+      transition: box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing);
+    }
+
+    .status-card:hover {
+      box-shadow: var(--md-sys-elevation-2);
+    }
+
+    .status-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      letter-spacing: 0.1px;
+      margin-bottom: 12px;
+    }
+
+    .count-container {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .count {
-      font-size: 32px;
-      font-weight: 700;
-      color: #a970ff;
-      margin: 8px 0;
-      text-shadow: 0 2px 8px rgba(169, 112, 255, 0.3);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--md-sys-color-primary);
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
     }
 
-    #claimButton {
+    .count-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .status-message {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface-variant);
+      letter-spacing: 0.4px;
+      margin-top: 8px;
+    }
+
+    /* Info Banner */
+    .info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--md-sys-color-secondary-container);
+      border-radius: var(--md-sys-shape-medium);
+      margin-bottom: 16px;
+    }
+
+    .info-icon {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .info-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--md-sys-color-on-secondary-container);
+      flex: 1;
+    }
+
+    .info-text a {
+      color: var(--md-sys-color-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .info-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Primary Button - Material 3 Filled Button */
+    .primary-button {
       width: 100%;
       padding: 16px 24px;
-      background: linear-gradient(135deg, #9147ff 0%, #772ce8 100%);
+      background: var(--md-sys-color-primary);
       border: none;
-      border-radius: 12px;
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
+      border-radius: var(--md-sys-shape-large);
+      color: var(--md-sys-color-on-primary);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(145, 71, 255, 0.4);
+      transition: all var(--md-sys-motion-duration-short) var(--md-sys-motion-easing);
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      position: relative;
+      overflow: hidden;
     }
 
-    #claimButton:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(145, 71, 255, 0.6);
-      background: linear-gradient(135deg, #a970ff 0%, #8b3dff 100%);
+    .primary-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity var(--md-sys-motion-duration-short) var(--md-sys-motion-easing);
     }
 
-    #claimButton:active:not(:disabled) {
-      transform: translateY(0);
+    .primary-button:hover:not(:disabled)::before {
+      opacity: 0.08;
     }
 
-    #claimButton:disabled {
-      opacity: 0.6;
+    .primary-button:hover:not(:disabled) {
+      box-shadow: var(--md-sys-elevation-1);
+    }
+
+    .primary-button:active:not(:disabled)::before {
+      opacity: 0.12;
+    }
+
+    .primary-button:disabled {
+      background: var(--md-sys-disabled-container);
+      color: var(--md-sys-disabled-content);
       cursor: not-allowed;
-      background: linear-gradient(135deg, #6c5a8a 0%, #4a3d5e 100%);
     }
 
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
+    .primary-button .button-icon {
+      font-size: 18px;
+    }
+
+    .primary-button .button-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Progress Indicator */
+    .circular-progress {
+      width: 18px;
+      height: 18px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: rotate 1s linear infinite;
+      opacity: 0.8;
     }
 
-    @keyframes spin {
+    @keyframes rotate {
       to { transform: rotate(360deg); }
     }
 
-    .success {
-      color: #5dffb0;
+    /* Status States */
+    .status-success {
+      color: var(--md-sys-color-success) !important;
     }
 
-    .error {
-      color: #ff5d5d;
+    .status-error {
+      color: var(--md-sys-color-error) !important;
     }
 
+    .status-warning {
+      color: var(--md-sys-color-warning) !important;
+    }
+
+    /* Footer */
     .footer {
+      padding: 0 16px 16px;
       text-align: center;
-      margin-top: 16px;
+    }
+
+    .footer-text {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--md-sys-color-outline);
+      letter-spacing: 0.4px;
     }
 
-    .footer a {
-      color: #a970ff;
-      text-decoration: none;
-      transition: color 0.2s ease;
+    /* Empty State */
+    .empty-state {
+      padding: 32px 20px;
+      text-align: center;
     }
 
-    .footer a:hover {
-      color: #bf94ff;
-      text-decoration: underline;
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface-variant);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="icon">🎁</div>
-      <h1>Drops Auto Claimer</h1>
-      <p class="subtitle">Claim all available drops instantly</p>
+  <div class="header">
+    <div class="header-top">
+      <div class="icon-container">🎁</div>
+      <div class="header-text">
+        <h1>Drops Auto Claimer</h1>
+        <p>Claim all available drops instantly</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="status-card" id="statusCard">
+      <div class="status-label" id="statusLabel">Available Drops</div>
+      <div class="count-container">
+        <span class="count" id="count">0</span>
+        <span class="count-label">drops</span>
+      </div>
+      <div class="status-message" id="statusMessage">Ready to claim</div>
     </div>
 
-    <div class="status" id="status">
-      <div class="status-text" id="statusText">Ready to claim drops</div>
-      <div class="count" id="count">0</div>
-      <div class="status-text">drops available</div>
+    <div class="info-banner">
+      <span class="info-icon">ℹ️</span>
+      <span class="info-text">
+        Make sure you're on <a href="https://www.twitch.tv/drops/inventory" target="_blank">twitch.tv/drops/inventory</a> to claim your drops
+      </span>
     </div>
 
-    <button id="claimButton">
-      <span id="buttonText">🎯 Claim All Drops</span>
+    <button id="claimButton" class="primary-button">
+      <span class="button-icon" id="buttonIcon">🎯</span>
+      <span class="button-text" id="buttonText">Claim All Drops</span>
     </button>
+  </div>
 
-    <div class="footer">
-      Make sure you're on <a href="https://www.twitch.tv/drops/inventory" target="_blank">twitch.tv/drops/inventory</a>
-    </div>
+  <div class="footer">
+    <span class="footer-text">Twitch Drops Auto Claimer</span>
   </div>
 
   <script src="popup.js"></script>
