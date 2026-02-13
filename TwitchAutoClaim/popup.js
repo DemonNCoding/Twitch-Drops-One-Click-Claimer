@@ -1,7 +1,9 @@
 const claimButton = document.getElementById('claimButton');
-const statusText = document.getElementById('statusText');
+const statusLabel = document.getElementById('statusLabel');
+const statusMessage = document.getElementById('statusMessage');
 const count = document.getElementById('count');
 const buttonText = document.getElementById('buttonText');
+const buttonIcon = document.getElementById('buttonIcon');
 
 // Check if we're on the right page and count available drops
 async function checkDropsAvailable() {
@@ -9,9 +11,13 @@ async function checkDropsAvailable() {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
     if (!tab.url.includes('twitch.tv/drops/inventory')) {
-      statusText.textContent = 'Navigate to Drops Inventory page';
-      count.textContent = '⚠️';
-      claimButton.disabled = true;
+      statusLabel.textContent = 'Not on Drops page';
+      statusMessage.textContent = 'Click button to navigate';
+      statusMessage.className = 'status-message status-warning';
+      count.textContent = '—';
+      claimButton.disabled = false;
+      buttonText.textContent = 'Go to Drops Inventory';
+      buttonIcon.textContent = '🔗';
       return;
     }
 
@@ -24,16 +30,26 @@ async function checkDropsAvailable() {
     count.textContent = dropsCount;
     
     if (dropsCount === 0) {
-      statusText.textContent = 'No drops to claim';
+      statusLabel.textContent = 'No drops available';
+      statusMessage.textContent = 'Check back later for new drops';
+      statusMessage.className = 'status-message';
       claimButton.disabled = true;
+      buttonText.textContent = 'No Drops to Claim';
+      buttonIcon.textContent = '✓';
     } else {
-      statusText.textContent = 'Ready to claim drops';
+      statusLabel.textContent = 'Available Drops';
+      statusMessage.textContent = 'Ready to claim';
+      statusMessage.className = 'status-message';
       claimButton.disabled = false;
+      buttonText.textContent = 'Claim All Drops';
+      buttonIcon.textContent = '🎯';
     }
   } catch (error) {
     console.error('Error checking drops:', error);
-    statusText.textContent = 'Error checking page';
-    count.textContent = '❌';
+    statusLabel.textContent = 'Error';
+    statusMessage.textContent = 'Could not check page';
+    statusMessage.className = 'status-message status-error';
+    count.textContent = '—';
   }
 }
 
@@ -80,8 +96,11 @@ claimButton.addEventListener('click', async () => {
     if (!tab.url.includes('twitch.tv/drops/inventory')) {
       // Navigate to the drops inventory page
       await chrome.tabs.update(tab.id, { url: 'https://www.twitch.tv/drops/inventory' });
-      statusText.textContent = 'Navigating to drops page...';
-      statusText.className = 'status-text';
+      statusLabel.textContent = 'Navigating...';
+      statusMessage.textContent = 'Taking you to drops inventory';
+      statusMessage.className = 'status-message';
+      buttonText.textContent = 'Loading...';
+      buttonIcon.textContent = '⏳';
       setTimeout(() => {
         window.close();
       }, 1000);
@@ -90,8 +109,11 @@ claimButton.addEventListener('click', async () => {
 
     // Disable button and show loading
     claimButton.disabled = true;
-    buttonText.innerHTML = '<span class="spinner"></span> Claiming...';
-    statusText.textContent = 'Claiming drops...';
+    buttonIcon.innerHTML = '<span class="circular-progress"></span>';
+    buttonText.textContent = 'Claiming...';
+    statusLabel.textContent = 'In Progress';
+    statusMessage.textContent = 'Claiming your drops...';
+    statusMessage.className = 'status-message';
 
     // Execute the claim function
     const result = await chrome.scripting.executeScript({
@@ -103,10 +125,12 @@ claimButton.addEventListener('click', async () => {
 
     // Update UI with success message
     if (claimedCount > 0) {
-      statusText.textContent = 'Successfully claimed!';
-      statusText.className = 'status-text success';
+      statusLabel.textContent = 'Success!';
+      statusMessage.textContent = `Claimed ${claimedCount} drop${claimedCount > 1 ? 's' : ''}`;
+      statusMessage.className = 'status-message status-success';
       count.textContent = claimedCount;
-      buttonText.textContent = '✅ Claimed!';
+      buttonText.textContent = 'Claimed!';
+      buttonIcon.textContent = '✅';
       
       // Wait for all clicks to complete (200ms per claim + 1 second buffer) then refresh
       const totalTime = (claimedCount * 200) + 1000;
@@ -115,16 +139,21 @@ claimButton.addEventListener('click', async () => {
         window.close();
       }, totalTime);
     } else {
-      statusText.textContent = 'No drops found';
-      buttonText.textContent = '🎯 Claim All Drops';
+      statusLabel.textContent = 'No drops found';
+      statusMessage.textContent = 'Try refreshing the page';
+      statusMessage.className = 'status-message status-warning';
+      buttonText.textContent = 'Claim All Drops';
+      buttonIcon.textContent = '🎯';
       claimButton.disabled = false;
     }
 
   } catch (error) {
     console.error('Error claiming drops:', error);
-    statusText.textContent = 'Error claiming drops';
-    statusText.className = 'status-text error';
-    buttonText.textContent = '🎯 Claim All Drops';
+    statusLabel.textContent = 'Error';
+    statusMessage.textContent = 'Failed to claim drops';
+    statusMessage.className = 'status-message status-error';
+    buttonText.textContent = 'Try Again';
+    buttonIcon.textContent = '↻';
     claimButton.disabled = false;
   }
 });
